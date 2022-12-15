@@ -1,6 +1,7 @@
 package ir.stream.controller;
 
 import ir.stream.dto.Message;
+import ir.stream.utils.CacheUtils;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -19,8 +20,17 @@ public class ChatController {
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
     public Message receivePublicMessage(@Payload Message message) {
+        CacheUtils.roomMessageMap.get(1L).add(message);
         return message;
     }
+
+    @MessageMapping("/member")
+    @SendTo("/chatroom/members")
+    public Message tt(@Payload Message message) {
+        return message;
+    }
+
+
 
     @MessageMapping("/private-message")
     public Message receivePrivateMessage(@Payload Message message) {
