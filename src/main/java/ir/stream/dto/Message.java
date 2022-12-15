@@ -9,9 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class Message {
+    private long id;
     private String senderName;
     private String receiverName;
     private String message;
     private String date;
     private Status status;
+
 }
