@@ -2,14 +2,14 @@ package ir.stream.core.service;
 
 
 import ir.stream.core.exception.NotFoundException;
-import ir.stream.core.model.BaseEntity;
+import ir.stream.core.model.AbstractBaseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 import java.util.List;
 
-public interface CrudService<ENTITY extends BaseEntity<PK>, PK extends Serializable> {
+public interface CrudService<ENTITY extends AbstractBaseEntity<PK>, PK extends Serializable> {
 
     Page<ENTITY> findAll(Pageable pageable);
 
