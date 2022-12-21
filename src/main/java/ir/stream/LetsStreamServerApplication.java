@@ -1,10 +1,10 @@
 package ir.stream;
 
-import ir.stream.entity.Role;
-import ir.stream.entity.User;
-import ir.stream.service.RoleService;
-import ir.stream.service.UserRoleService;
-import ir.stream.service.UserService;
+import ir.stream.app.entity.Role;
+import ir.stream.app.entity.User;
+import ir.stream.app.service.RoleService;
+import ir.stream.app.service.UserRoleService;
+import ir.stream.app.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
