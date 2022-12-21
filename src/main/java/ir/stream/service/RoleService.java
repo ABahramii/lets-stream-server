@@ -18,8 +18,8 @@ public class RoleService
         this.roleRepository = roleRepository;
     }
 
-    public Role save(Role role) {
-        return roleRepository.save(role);
+    public Role create(Role role) {
+        return save(role);
     }
 
     public Role findByName(String name) {

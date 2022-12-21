@@ -1,12 +1,11 @@
 package ir.stream.service;
 
 
+import ir.stream.core.exception.NotFoundException;
 import ir.stream.core.service.AbstractCrudService;
 import ir.stream.entity.User;
 import ir.stream.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService extends AbstractCrudService<User, Long, UserRepository> {
@@ -17,16 +16,13 @@ public class UserService extends AbstractCrudService<User, Long, UserRepository>
         this.userRepository = userRepository;
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new NotFoundException(String.format("User by username %s not found !", username)));
+    }
+
     public User create(User user) {
         return save(user);
     }
 
-    public void addRoleToUser(String username, String roleName) {
-
-    }
-
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
 }
