@@ -1,6 +1,7 @@
 package ir.stream.rest;
 
 import ir.stream.core.dto.HttpResponse;
+import ir.stream.dto.UserDTO;
 import ir.stream.dto.UserRoleDTO;
 import ir.stream.entity.Role;
 import ir.stream.entity.User;
@@ -8,6 +9,7 @@ import ir.stream.entity.UserRole;
 import ir.stream.service.RoleService;
 import ir.stream.service.UserRoleService;
 import ir.stream.service.UserService;
+import ir.stream.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,10 @@ public class UserResource {
     private final UserRoleService userRoleService;
 
     @GetMapping
-    public ResponseEntity<HttpResponse<List<User>>> findALl() {
+    public ResponseEntity<HttpResponse<List<UserDTO>>> findALl() {
         List<User> userList = userService.findAll();
-        return ResponseEntity.ok(new HttpResponse<>(userList));
+        List<UserDTO> userDtoList = Mapper.userDtoMapper(userList);
+        return ResponseEntity.ok(new HttpResponse<>(userDtoList));
     }
 
     @PostMapping("/user/create")

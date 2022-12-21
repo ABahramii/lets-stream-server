@@ -27,7 +27,7 @@ public class User extends AbstractBaseEntity<Long> {
     @Column(name = "USERNAME", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "PASSWORD", unique = true, nullable = false)
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)

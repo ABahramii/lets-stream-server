@@ -27,7 +27,6 @@ public class Role extends AbstractBaseEntity<Long> {
     @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
-
     @OneToMany(mappedBy = "role")
     private Set<UserRole> userRoles = new HashSet<>();
 
