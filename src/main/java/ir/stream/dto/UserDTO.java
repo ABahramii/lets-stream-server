@@ -1,5 +1,6 @@
 package ir.stream.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,14 +8,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
-    private long id;
+@AllArgsConstructor
+public class UserDTO {
     private String name;
     private String username;
     private String password;
 
-    public User(long id, String username) {
-        this.id = id;
-        this.username = username;
-    }
 }

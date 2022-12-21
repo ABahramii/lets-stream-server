@@ -1,15 +1,14 @@
-package ir.stream.controller;
+package ir.stream.rest;
 
 import ir.stream.dto.Message;
-import ir.stream.dto.User;
-import ir.stream.utils.CacheUtils;
+import ir.stream.dto.UserDTO;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ChatController {
+public class ChatResource {
 
     /*private final SimpMessagingTemplate simpMessagingTemplate;
 
@@ -20,13 +19,12 @@ public class ChatController {
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
     public Message receivePublicMessage(@Payload Message message) {
-        CacheUtils.roomMessageMap.get(1L).add(message);
         return message;
     }
 
     @MessageMapping("/member")
     @SendTo("/chatroom/members")
-    public User tt(@Payload User member) {
+    public UserDTO tt(@Payload UserDTO member) {
         return member;
     }
 

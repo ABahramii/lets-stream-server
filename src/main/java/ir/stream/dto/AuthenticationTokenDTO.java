@@ -9,10 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
-    private long id;
-    private String name;
-    private User owner;
-
-//    private Set<User> members;
+public class AuthenticationTokenDTO {
+    private String accessToken;
+    private String refreshToken;
+    private long accessTokenExpireAt;
+    private long refreshTokenExpireAt;
 }
