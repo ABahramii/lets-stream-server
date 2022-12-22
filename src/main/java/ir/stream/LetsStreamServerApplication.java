@@ -22,7 +22,7 @@ public class LetsStreamServerApplication {
     @Bean
     public CommandLineRunner run(UserService userService, RoleService roleService, UserRoleService userRoleService) {
         return args -> {
-            User user1 = new User("amir", "java9", "123", new HashSet<>());
+            User user1 = new User("amir", "java", "123", new HashSet<>());
             User user2 = new User("james", "butterfly", "123", new HashSet<>());
             User user3 = new User("dan", "rtmp", "123", new HashSet<>());
             userService.create(user1);
