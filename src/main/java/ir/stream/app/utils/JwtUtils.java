@@ -3,6 +3,12 @@ package ir.stream.app.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import ir.stream.app.dto.AccessTokenDTO;
+import ir.stream.app.dto.AuthenticationTokenDTO;
+import ir.stream.app.entity.RefreshToken;
+import ir.stream.app.entity.User;
+import ir.stream.app.service.RefreshTokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +19,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtils {
     private final String jwtSigningKey = "secret";
+    private final RefreshTokenService refreshTokenService;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -23,11 +31,6 @@ public class JwtUtils {
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-
-    /*public boolean hasClaim(String token, String claimName) {
-        final Claims claims = extractAllClaim(token);
-        return claims.get(claimName) != null;
-    }*/
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaim(token);
@@ -42,25 +45,32 @@ public class JwtUtils {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails);
+    public AuthenticationTokenDTO generateToken(User user) {
+        // Todo
+        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(user, 1440);
+        AccessTokenDTO accessTokenDTO = createToken(new HashMap<>(), user);
+
+        return new AuthenticationTokenDTO(
+                accessTokenDTO.getToken(),
+                refreshToken.getUUID(),
+                accessTokenDTO.getExpireAt().getTime(),
+                refreshToken.getExpireAt().toEpochMilli()
+        );
     }
 
-    /*public String generateToken(UserDetails userDetails, Map<String, Object> claims) {
-        return createToken(claims, userDetails);
-    }*/
-
-    private String createToken(Map<String, Object> claims, UserDetails userDetails) {
-        return Jwts.builder()
+    private AccessTokenDTO createToken(Map<String, Object> claims, User user) {
+        Date expirationDate = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
+        String token = Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getUsername())
-                .claim("authorities", userDetails.getAuthorities())
+                .setSubject(user.getUsername())
+                .claim("authorities", user.getRoles())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 // Todo
-                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
+                .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
                 .compact();
+
+        return new AccessTokenDTO(token, expirationDate);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
