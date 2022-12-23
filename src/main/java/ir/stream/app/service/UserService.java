@@ -6,11 +6,12 @@ import ir.stream.app.repository.UserRepository;
 import ir.stream.core.exception.NotFoundException;
 import ir.stream.core.service.AbstractCrudService;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends AbstractCrudService<User, Long, UserRepository> {
+public class UserService extends AbstractCrudService<User, Long, UserRepository> implements UserDetailsService {
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -27,7 +28,8 @@ public class UserService extends AbstractCrudService<User, Long, UserRepository>
         return save(user);
     }
 
-    public UserDetails loadUserDetailsByUsername(String username) throws UsernameNotFoundException {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getRoles());
     }

@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 
@@ -21,10 +23,12 @@ public class LetsStreamServerApplication {
 
     @Bean
     public CommandLineRunner run(UserService userService, RoleService roleService, UserRoleService userRoleService) {
+        PasswordEncoder passwordEncoder = passwordEncoder();
+
         return args -> {
-            User user1 = new User("amir", "java", "123", new HashSet<>());
-            User user2 = new User("james", "butterfly", "123", new HashSet<>());
-            User user3 = new User("dan", "rtmp", "123", new HashSet<>());
+            User user1 = new User("amir", "java", passwordEncoder.encode("123"), new HashSet<>());
+            User user2 = new User("james", "butterfly", passwordEncoder.encode("123"), new HashSet<>());
+            User user3 = new User("dan", "rtmp", passwordEncoder.encode("123"), new HashSet<>());
             userService.create(user1);
             userService.create(user2);
             userService.create(user3);
@@ -43,6 +47,11 @@ public class LetsStreamServerApplication {
             userRoleService.create(user2, roleManager);
             userRoleService.create(user3, roleUser);
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
