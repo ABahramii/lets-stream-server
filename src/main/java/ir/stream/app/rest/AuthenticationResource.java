@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -42,5 +45,14 @@ public class AuthenticationResource {
         AuthenticationTokenDTO authenticationTokenDTO = userService.refreshTokens(uuid);
         return ResponseEntity.ok(new HttpResponse<>(authenticationTokenDTO));
     }
+
+    @GetMapping("/token/isValid/{token}")
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> isTokenValid(@PathVariable String token) {
+        String username = jwtUtils.extractUsername(token);
+        UserDetails userDetails = userService.loadUserByUsername(username);
+        boolean tokenValid = jwtUtils.isTokenValid(token, userDetails);
+        return ResponseEntity.ok(new HttpResponse<>(Map.of("isTokenValid", tokenValid)));
+    }
+
 
 }
