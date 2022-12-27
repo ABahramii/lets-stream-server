@@ -59,7 +59,7 @@ public class JwtUtils {
     }
 
     private AccessTokenDTO createToken(Map<String, Object> claims, User user) {
-        Date expirationDate = new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24));
+        Date expirationDate = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15));
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())
