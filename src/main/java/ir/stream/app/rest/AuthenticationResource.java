@@ -48,10 +48,14 @@ public class AuthenticationResource {
 
     @GetMapping("/token/isValid/{token}")
     public ResponseEntity<HttpResponse<Map<String, Boolean>>> isTokenValid(@PathVariable String token) {
-        String username = jwtUtils.extractUsername(token);
-        UserDetails userDetails = userService.loadUserByUsername(username);
-        boolean tokenValid = jwtUtils.isTokenValid(token, userDetails);
-        return ResponseEntity.ok(new HttpResponse<>(Map.of("isTokenValid", tokenValid)));
+        try {
+            String username = jwtUtils.extractUsername(token);
+            UserDetails userDetails = userService.loadUserByUsername(username);
+            boolean tokenValid = jwtUtils.isTokenValid(token, userDetails);
+            return ResponseEntity.ok(new HttpResponse<>(Map.of("isTokenValid", tokenValid)));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new HttpResponse<>(Map.of("isTokenValid", false)));
+        }
     }
 
 
