@@ -3,12 +3,12 @@ package ir.stream.app.service;
 import ir.stream.app.entity.Role;
 import ir.stream.app.entity.User;
 import ir.stream.app.entity.UserRole;
-import ir.stream.core.service.AbstractCrudService;
+import ir.stream.core.service.AbstractService;
 import ir.stream.app.repository.UserRoleRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserRoleService extends AbstractCrudService<UserRole, Long, UserRoleRepository> {
+public class UserRoleService extends AbstractService<UserRole, Long, UserRoleRepository> {
 
     public UserRoleService(UserRoleRepository userRoleRepository) {
         super(userRoleRepository);

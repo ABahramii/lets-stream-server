@@ -3,13 +3,12 @@ package ir.stream.app.service;
 import ir.stream.app.entity.Role;
 import ir.stream.app.repository.RoleRepository;
 import ir.stream.core.exception.NotFoundException;
-import ir.stream.core.service.AbstractCrudService;
+import ir.stream.core.service.AbstractService;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class RoleService
-        extends AbstractCrudService<Role, Long, RoleRepository> {
+public class RoleService extends AbstractService<Role, Long, RoleRepository> {
 
     private final RoleRepository roleRepository;
 

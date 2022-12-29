@@ -6,14 +6,14 @@ import ir.stream.app.entity.User;
 import ir.stream.app.repository.UserRepository;
 import ir.stream.app.utils.JwtUtils;
 import ir.stream.core.exception.NotFoundException;
-import ir.stream.core.service.AbstractCrudService;
+import ir.stream.core.service.AbstractService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService extends AbstractCrudService<User, Long, UserRepository> implements UserDetailsService {
+public class UserService extends AbstractService<User, Long, UserRepository> implements UserDetailsService {
     private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
     private final JwtUtils jwtUtils;

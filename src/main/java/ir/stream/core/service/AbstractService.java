@@ -12,13 +12,13 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 
-public class AbstractCrudService<ENTITY extends AbstractBaseEntity<PK>,
+public class AbstractService<ENTITY extends AbstractBaseEntity<PK>,
         PK extends Serializable, REPOSITORY extends AbstractCrudRepository<ENTITY, PK>> implements CrudService<ENTITY, PK> {
 
     private final REPOSITORY abstractRepository;
     protected Class<ENTITY> entityClass;
 
-    public AbstractCrudService(REPOSITORY abstractRepository) {
+    public AbstractService(REPOSITORY abstractRepository) {
         this.abstractRepository = abstractRepository;
         if (getClass().getGenericSuperclass() == getClass().getGenericSuperclass()) {
             ParameterizedType genericSuperClass = (ParameterizedType) getClass().getGenericSuperclass();

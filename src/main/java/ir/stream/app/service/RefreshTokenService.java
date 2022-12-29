@@ -3,7 +3,7 @@ package ir.stream.app.service;
 import ir.stream.app.entity.User;
 import ir.stream.app.repository.RefreshTokenRepository;
 import ir.stream.core.exception.NotFoundException;
-import ir.stream.core.service.AbstractCrudService;
+import ir.stream.core.service.AbstractService;
 import ir.stream.app.entity.RefreshToken;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
-public class RefreshTokenService extends AbstractCrudService<RefreshToken, Long, RefreshTokenRepository> {
+public class RefreshTokenService extends AbstractService<RefreshToken, Long, RefreshTokenRepository> {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
