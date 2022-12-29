@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,20 +14,19 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ROLE")
-public class Role extends AbstractBaseEntity<Long> {
-
-    // Todo: remove unused roles
-    @Transient
-    public static final String USER_ROLE = "USER";
-
-    @Transient
-    public static final String ADMIN = "ADMIN";
+@Table(name = "ROOM")
+public class Room extends AbstractBaseEntity<Long> {
 
     @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private Set<UserRole> userRoles = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "OWNER")
+    private User owner;
 
+    @OneToMany(mappedBy = "room")
+    private Set<RoomUser> users;
+
+    @OneToMany(mappedBy = "room")
+    private Set<Guest> guests;
 }
