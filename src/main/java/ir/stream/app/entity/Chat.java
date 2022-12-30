@@ -22,9 +22,11 @@ public class Chat extends AbstractBaseEntity<Long> {
     @Column(name = "TIME")
     private String time;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @Column(name = "SENDER_NAME")
+    private String senderName;
+
+    @Column(name = "SENDER_IS_USER")
+    private boolean senderIsUser;
 
     @ManyToOne
     @JoinColumn(name = "ROOM_ID")
