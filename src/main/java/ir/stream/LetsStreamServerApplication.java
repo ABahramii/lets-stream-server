@@ -46,7 +46,7 @@ public class LetsStreamServerApplication {
             userRoleService.create(user2, roleManager);
             userRoleService.create(user3, roleUser);
 
-            Room room = new Room("name", user1, new HashSet<>(), new HashSet<>());
+            Room room = new Room("temp", user1, new HashSet<>(), new HashSet<>());
             roomService.save(room);
 
             Guest guest1 = new Guest("guest-1", room);
