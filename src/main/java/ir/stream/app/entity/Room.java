@@ -20,7 +20,7 @@ public class Room extends AbstractBaseEntity<Long> {
     @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OWNER")
     private User owner;
 
