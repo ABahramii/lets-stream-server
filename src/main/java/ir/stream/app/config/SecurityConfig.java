@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/room/**").permitAll()
                 .antMatchers("/ws").permitAll()
                 .anyRequest()
                 .authenticated()
