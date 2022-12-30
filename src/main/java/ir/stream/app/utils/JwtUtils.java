@@ -46,15 +46,16 @@ public class JwtUtils {
     }
 
     public AuthenticationTokenDTO generateToken(User user) {
-        // Todo
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(user, 1440);
         AccessTokenDTO accessTokenDTO = createToken(new HashMap<>(), user);
 
+        // Todo: remove refresh token or use it
         return new AuthenticationTokenDTO(
                 accessTokenDTO.getToken(),
                 refreshToken.getUUID(),
                 accessTokenDTO.getExpireAt().getTime(),
-                refreshToken.getExpireAt().toEpochMilli()
+                refreshToken.getExpireAt().toEpochMilli(),
+                user.getUsername()
         );
     }
 

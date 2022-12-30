@@ -29,8 +29,6 @@ public class AuthenticationResource {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword())
         );
-
-//        UserDetails user = userService.loadUserByUsername(authDTO.getUsername());
         User user = userService.findByUsername(authDTO.getUsername());
         if (user != null) {
             return ResponseEntity.ok(new HttpResponse<>(jwtUtils.generateToken(user)));

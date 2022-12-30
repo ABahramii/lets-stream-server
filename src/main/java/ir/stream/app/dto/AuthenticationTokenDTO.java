@@ -14,4 +14,5 @@ public class AuthenticationTokenDTO {
     private String refreshToken;
     private long accessTokenExpireAt;
     private long refreshTokenExpireAt;
+    private String username;
 }
