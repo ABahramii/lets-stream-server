@@ -28,7 +28,7 @@ public class Chat extends AbstractBaseEntity<Long> {
     @Column(name = "SENDER_IS_USER")
     private boolean senderIsUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ROOM_ID")
     private Room room;
 
