@@ -10,7 +10,7 @@ import java.util.List;
 public interface RoomUserRepository extends AbstractCrudRepository<RoomUser, Long> {
 
     @Query(
-            "select new ir.stream.app.dto.MemberDTO(user.name, true) from RoomUser roomUser " +
+            "select new ir.stream.app.dto.MemberDTO(user.username, true) from RoomUser roomUser " +
             "inner join roomUser.room room " +
             "inner join roomUser.user user " +
             "where room.UUID=:uuid"
