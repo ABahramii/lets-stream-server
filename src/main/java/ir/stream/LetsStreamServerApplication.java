@@ -54,10 +54,10 @@ public class LetsStreamServerApplication {
             guestService.save(guest1);
             guestService.save(guest2);
 
-            RoomUser roomUser1 = new RoomUser(room, user1);
+//            RoomUser roomUser1 = new RoomUser(room, user1);
             RoomUser roomUser2 = new RoomUser(room, user2);
             RoomUser roomUser3 = new RoomUser(room, user3);
-            roomUserService.save(roomUser1);
+//            roomUserService.save(roomUser1);
             roomUserService.save(roomUser2);
             roomUserService.save(roomUser3);
 
