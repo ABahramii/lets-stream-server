@@ -1,33 +1,55 @@
 package ir.stream.app.rest;
 
-import ir.stream.app.dto.Message;
-import ir.stream.app.dto.UserDTO;
+import ir.stream.app.dto.ChatDTO;
+import ir.stream.app.dto.MemberDTO;
+import ir.stream.app.entity.Guest;
+import ir.stream.app.entity.Room;
+import ir.stream.app.entity.RoomUser;
+import ir.stream.app.entity.User;
+import ir.stream.app.service.GuestService;
+import ir.stream.app.service.RoomService;
+import ir.stream.app.service.RoomUserService;
+import ir.stream.app.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@RequiredArgsConstructor
 public class ChatResource {
 
-    /*private final SimpMessagingTemplate simpMessagingTemplate;
+    private final UserService userService;
+    private final RoomUserService roomUserService;
+    private final RoomService roomService;
+    private final GuestService guestService;
 
-    public ChatController(SimpMessagingTemplate simpMessagingTemplate) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
-    }*/
 
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
-    public Message receivePublicMessage(@Payload Message message) {
-        return message;
+    public ChatDTO receivePublicMessage(@Payload ChatDTO chatDTO) {
+        return chatDTO;
     }
 
     @MessageMapping("/member")
     @SendTo("/chatroom/members")
-    public UserDTO tt(@Payload UserDTO member) {
-        return member;
-    }
+    public MemberDTO joinMember(@Payload MemberDTO memberDTO) {
+        if (memberDTO.getName() != null && !memberDTO.getName().isEmpty()) {
+            // Todo: room Must be dynamic
+            Room room = roomService.getById(1L);
 
+            if (memberDTO.isUser()) {
+                User user = userService.findByUsername(memberDTO.getName());
+                roomUserService.save(new RoomUser(room, user));
+            } else {
+                guestService.save(new Guest(memberDTO.getName(), room));
+            }
+            return memberDTO;
+        } else {
+            return new MemberDTO("", false);
+        }
+    }
 
 
     /*@MessageMapping("/private-message")
