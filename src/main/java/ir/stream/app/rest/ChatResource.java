@@ -2,14 +2,8 @@ package ir.stream.app.rest;
 
 import ir.stream.app.dto.ChatDTO;
 import ir.stream.app.dto.MemberDTO;
-import ir.stream.app.entity.Guest;
-import ir.stream.app.entity.Room;
-import ir.stream.app.entity.RoomUser;
-import ir.stream.app.entity.User;
-import ir.stream.app.service.GuestService;
-import ir.stream.app.service.RoomService;
-import ir.stream.app.service.RoomUserService;
-import ir.stream.app.service.UserService;
+import ir.stream.app.entity.*;
+import ir.stream.app.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -24,12 +18,21 @@ public class ChatResource {
     private final RoomUserService roomUserService;
     private final RoomService roomService;
     private final GuestService guestService;
+    private final ChatService chatService;
 
 
+    // Todo: add security filter for send data
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
     public ChatDTO receivePublicMessage(@Payload ChatDTO chatDTO) {
-        return chatDTO;
+        if (chatDTO != null && chatDTO.getMessage() != null) {
+            Room room = roomService.getById(1L);
+            Chat chat = new Chat(chatDTO.getMessage(), chatDTO.getTime(), chatDTO.getSenderName(), chatDTO.isSenderIsUser(), room);
+            chatService.save(chat);
+            return chatDTO;
+        } else {
+            return new ChatDTO();
+        }
     }
 
     @MessageMapping("/member")
@@ -40,6 +43,7 @@ public class ChatResource {
             Room room = roomService.getById(1L);
 
             if (memberDTO.isUser()) {
+                // Todo: add exception handling for userNotFound
                 User user = userService.findByUsername(memberDTO.getName());
                 roomUserService.save(new RoomUser(room, user));
             } else {
@@ -47,7 +51,7 @@ public class ChatResource {
             }
             return memberDTO;
         } else {
-            return new MemberDTO("", false);
+            return new MemberDTO();
         }
     }
 
