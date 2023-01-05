@@ -3,17 +3,14 @@ package ir.stream.app.rest;
 import ir.stream.app.dto.ChatDTO;
 import ir.stream.app.dto.MemberDTO;
 import ir.stream.app.entity.Room;
-import ir.stream.app.service.ChatService;
-import ir.stream.app.service.RoomService;
+import ir.stream.app.service.*;
 import ir.stream.core.dto.HttpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/room")
@@ -22,6 +19,8 @@ public class RoomResource {
 
     private final RoomService roomService;
     private final ChatService chatService;
+    private final RoomUserService roomUserService;
+    private final GuestService guestService;
 
     @GetMapping
     public ResponseEntity<HttpResponse<List<Room>>> findALl() {
@@ -36,6 +35,17 @@ public class RoomResource {
     @GetMapping("/{uuid}/chats")
     public ResponseEntity<HttpResponse<List<ChatDTO>>> findRoomChats(@PathVariable String uuid) {
         return ResponseEntity.ok(new HttpResponse<>(chatService.findChatsByRoomUUID(uuid)));
+    }
+
+    @PostMapping("/{uuid}/checkJoin")
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> checkJoin(@PathVariable String uuid, @RequestBody MemberDTO memberDTO) {
+        boolean canJoin;
+        if (memberDTO.isUser()) {
+            canJoin = roomUserService.userCanJoinToRoom(memberDTO.getName(), uuid);
+        } else {
+            canJoin = guestService.guestCanJoinToRoom(memberDTO.getName(), uuid);
+        }
+        return ResponseEntity.ok(new HttpResponse<>(Map.of("canJoin", canJoin)));
     }
 
 }
