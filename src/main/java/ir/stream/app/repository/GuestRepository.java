@@ -15,4 +15,8 @@ public interface GuestRepository extends AbstractCrudRepository<Guest, Long> {
             "where room.UUID=:uuid"
     )
     List<MemberDTO> findGuestMemberDtoListByRoomUUID(String uuid);
+
+
+    long countGuestByNameAndRoomUUID(String name, String roomUUID);
+
 }

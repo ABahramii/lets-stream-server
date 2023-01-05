@@ -20,4 +20,8 @@ public class GuestService extends AbstractService<Guest, Long, GuestRepository> 
     public List<MemberDTO> findGuestMemberDtoListByRoomUUID(String uuid) {
         return guestRepository.findGuestMemberDtoListByRoomUUID(uuid);
     }
+
+    public boolean guestCanJoinToRoom(String guestName, String roomUUID) {
+        return guestRepository.countGuestByNameAndRoomUUID(guestName, roomUUID) == 0;
+    }
 }
