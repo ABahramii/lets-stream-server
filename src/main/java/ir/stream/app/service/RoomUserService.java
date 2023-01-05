@@ -21,4 +21,8 @@ public class RoomUserService extends AbstractService<RoomUser, Long, RoomUserRep
     public List<MemberDTO> findUserMemberDtoListByRoomUUID(String uuid) {
         return roomUserRepository.findUserMemberDtoListByRoomUUID(uuid);
     }
+
+    public boolean userCanJoinToRoom(String username, String roomUUID) {
+        return roomUserRepository.countByUsernameAndRoomUUID(username, roomUUID) == 0;
+    }
 }

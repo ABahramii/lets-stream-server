@@ -16,4 +16,13 @@ public interface RoomUserRepository extends AbstractCrudRepository<RoomUser, Lon
             "where room.UUID=:uuid"
     )
     List<MemberDTO> findUserMemberDtoListByRoomUUID(String uuid);
+
+    @Query(
+            "select count(roomUser) from RoomUser roomUser " +
+            "inner join roomUser.room room " +
+            "inner join roomUser.user user " +
+            "where room.UUID=:roomUUID and user.username=:username"
+    )
+    long countByUsernameAndRoomUUID(String username, String roomUUID);
+
 }
