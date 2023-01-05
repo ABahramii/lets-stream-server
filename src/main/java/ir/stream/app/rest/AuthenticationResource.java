@@ -2,6 +2,7 @@ package ir.stream.app.rest;
 
 import ir.stream.app.dto.AuthDTO;
 import ir.stream.app.dto.AuthenticationTokenDTO;
+import ir.stream.app.dto.UsernameTokenDTO;
 import ir.stream.app.entity.User;
 import ir.stream.app.service.UserService;
 import ir.stream.app.utils.JwtUtils;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -44,7 +44,7 @@ public class AuthenticationResource {
         return ResponseEntity.ok(new HttpResponse<>(authenticationTokenDTO));
     }
 
-    @GetMapping("/token/isValid/{token}")
+    /*@GetMapping("/token/isValid/{token}")
     public ResponseEntity<HttpResponse<Map<String, Boolean>>> isTokenValid(@PathVariable String token) {
         try {
             String username = jwtUtils.extractUsername(token);
@@ -54,7 +54,12 @@ public class AuthenticationResource {
         } catch (Exception e) {
             return ResponseEntity.ok(new HttpResponse<>(Map.of("isTokenValid", false)));
         }
+    }*/
+
+    @PostMapping("/token/isValid")
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> checkTokenWithUsername(@RequestBody UsernameTokenDTO usernameTokenDTO) {
+        String username = jwtUtils.extractUsername(usernameTokenDTO.getToken());
+        boolean tokenValid = username.equals(usernameTokenDTO.getUsername()) && !jwtUtils.isTokenExpired(usernameTokenDTO.getToken());
+        return ResponseEntity.ok(new HttpResponse<>(Map.of("isTokenValid", tokenValid)));
     }
-
-
 }
