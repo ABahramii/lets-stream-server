@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -25,16 +24,13 @@ public class ChatResource {
 
 
     // Todo: add security filter for send data
-    @MessageMapping("/message")
-    @SendTo("/chatroom/public")
-    public ChatDTO receivePublicMessage(@Payload ChatDTO chatDTO) {
+    @MessageMapping("/chat/{roomUUID}")
+    public void receiveChat(@Payload ChatDTO chatDTO, @DestinationVariable String roomUUID) {
         if (chatDTO != null && chatDTO.getMessage() != null) {
-            Room room = roomService.getById(1L);
+            Room room = roomService.findByUUID(roomUUID);
             Chat chat = new Chat(chatDTO.getMessage(), chatDTO.getTime(), chatDTO.getSenderName(), chatDTO.isSenderIsUser(), room);
             chatService.save(chat);
-            return chatDTO;
-        } else {
-            return new ChatDTO();
+            simpMessagingTemplate.convertAndSend("/room/chats/" + roomUUID, chatDTO);
         }
     }
 
@@ -53,28 +49,4 @@ public class ChatResource {
             simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
         }
     }
-
-    /*@MessageMapping("/member")
-    @SendTo("/chatroom/members")
-    public MemberDTO joinMember(@Payload MemberDTO memberDTO) {
-        if (memberDTO.getName() != null && !memberDTO.getName().isEmpty()) {
-            Room room = roomService.getById(1L);
-
-            if (memberDTO.isUser()) {
-                User user = userService.findByUsername(memberDTO.getName());
-                roomUserService.save(new RoomUser(room, user));
-            } else {
-                guestService.save(new Guest(memberDTO.getName(), room));
-            }
-            return memberDTO;
-        } else {
-            return new MemberDTO();
-        }
-    }*/
-
-    /*@MessageMapping("/private-message")
-    public Message receivePrivateMessage(@Payload Message message) {
-        simpMessagingTemplate.convertAndSendToUser(message.getReceiverName(), "/private", message); // /user/amir/private
-        return message;
-    }*/
 }
