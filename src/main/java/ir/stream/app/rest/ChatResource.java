@@ -5,15 +5,18 @@ import ir.stream.app.dto.MemberDTO;
 import ir.stream.app.entity.*;
 import ir.stream.app.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
 public class ChatResource {
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
     private final UserService userService;
     private final RoomUserService roomUserService;
     private final RoomService roomService;
@@ -35,15 +38,29 @@ public class ChatResource {
         }
     }
 
-    @MessageMapping("/member")
-    @SendTo("/chatroom/members")
-    public MemberDTO joinMember(@Payload MemberDTO memberDTO) {
+    @MessageMapping("/member/{roomUUID}")
+    public void joinMember(@Payload MemberDTO memberDTO, @DestinationVariable String roomUUID) {
         if (memberDTO.getName() != null && !memberDTO.getName().isEmpty()) {
-            // Todo: room Must be dynamic
-            Room room = roomService.getById(1L);
+            Room room = roomService.findByUUID(roomUUID);
 
             if (memberDTO.isUser()) {
                 // Todo: add exception handling for userNotFound
+                User user = userService.findByUsername(memberDTO.getName());
+                roomUserService.save(new RoomUser(room, user));
+            } else {
+                guestService.save(new Guest(memberDTO.getName(), room));
+            }
+            simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
+        }
+    }
+
+    /*@MessageMapping("/member")
+    @SendTo("/chatroom/members")
+    public MemberDTO joinMember(@Payload MemberDTO memberDTO) {
+        if (memberDTO.getName() != null && !memberDTO.getName().isEmpty()) {
+            Room room = roomService.getById(1L);
+
+            if (memberDTO.isUser()) {
                 User user = userService.findByUsername(memberDTO.getName());
                 roomUserService.save(new RoomUser(room, user));
             } else {
@@ -53,8 +70,7 @@ public class ChatResource {
         } else {
             return new MemberDTO();
         }
-    }
-
+    }*/
 
     /*@MessageMapping("/private-message")
     public Message receivePrivateMessage(@Payload Message message) {
