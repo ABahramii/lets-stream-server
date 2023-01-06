@@ -27,6 +27,16 @@ public class RoomResource {
         return ResponseEntity.ok(new HttpResponse<>(roomService.findAll()));
     }
 
+    @GetMapping("/{name}")
+    public ResponseEntity<HttpResponse<String>> findRoomUuidByName(@PathVariable String name) {
+        return ResponseEntity.ok(new HttpResponse<>(roomService.findRoomUUIDByName(name)));
+    }
+
+    @GetMapping("/exists/{uuid}")
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> roomExists(@PathVariable String uuid) {
+        return ResponseEntity.ok(new HttpResponse<>(Map.of("exists", roomService.roomExists(uuid))));
+    }
+
     @GetMapping("/{uuid}/members")
     public ResponseEntity<HttpResponse<List<MemberDTO>>> findRoomMembers(@PathVariable String uuid) {
         return ResponseEntity.ok(new HttpResponse<>(roomService.findRoomMembers(uuid)));
