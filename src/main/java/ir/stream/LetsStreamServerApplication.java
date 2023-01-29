@@ -46,17 +46,23 @@ public class LetsStreamServerApplication {
             userRoleService.create(user2, roleManager);
             userRoleService.create(user3, roleUser);
 
-            Room room = new Room("temp", user1, new HashSet<>(), new HashSet<>());
-            roomService.save(room);
-            System.out.println("RU: " + room.getUUID());
+            Room room0 = new Room("temp", user1, new HashSet<>(), new HashSet<>());
+            Room room1 = new Room("temp1", user1, new HashSet<>(), new HashSet<>());
+            Room room2 = new Room("temp2", user2, new HashSet<>(), new HashSet<>());
+            Room room3 = new Room("temp3", user3, new HashSet<>(), new HashSet<>());
 
-            Guest guest1 = new Guest("guest-1", room);
+            roomService.save(room0);
+            roomService.save(room1);
+            roomService.save(room2);
+            roomService.save(room3);
+
+            Guest guest1 = new Guest("guest-1", room0);
             guestService.save(guest1);
 
-            RoomUser roomUser2 = new RoomUser(room, user2);
+            RoomUser roomUser2 = new RoomUser(room0, user2);
             roomUserService.save(roomUser2);
 
-            Chat chat1 = new Chat("This is chatroom", "12 AM", user2.getUsername(), true, room);
+            Chat chat1 = new Chat("This is chatroom", "12 AM", user2.getUsername(), true, room0);
             chatService.save(chat1);
         };
     }
