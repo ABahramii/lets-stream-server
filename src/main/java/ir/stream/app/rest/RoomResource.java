@@ -4,6 +4,7 @@ import ir.stream.app.dto.ChatDTO;
 import ir.stream.app.dto.MemberDTO;
 import ir.stream.app.entity.Room;
 import ir.stream.app.service.*;
+import ir.stream.app.utils.JwtUtils;
 import ir.stream.core.dto.HttpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class RoomResource {
     private final ChatService chatService;
     private final RoomUserService roomUserService;
     private final GuestService guestService;
+    private final JwtUtils jwtUtils;
 
     @GetMapping
     public ResponseEntity<HttpResponse<List<Room>>> findALl() {
@@ -56,6 +58,17 @@ public class RoomResource {
             canJoin = guestService.guestCanJoinToRoom(memberDTO.getName(), uuid);
         }
         return ResponseEntity.ok(new HttpResponse<>(Map.of("canJoin", canJoin)));
+    }
+
+    // Todo: must be refactor
+    @GetMapping("{uuid}/userIsRoomOwner/{token}")
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> userIsRoomOwner(@PathVariable String uuid, @PathVariable String token) {
+        if (!jwtUtils.isTokenExpired(token)) {
+            String username = jwtUtils.extractUsername(token);
+            boolean isRoomOwner = roomService.userIsRoomOwner(uuid, username);
+            return ResponseEntity.ok(new HttpResponse<>(Map.of("isRoomOwner", isRoomOwner)));
+        }
+        return ResponseEntity.ok(new HttpResponse<>(Map.of("isRoomOwner", false)));
     }
 
 }

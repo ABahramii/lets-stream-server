@@ -39,4 +39,8 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
     public boolean roomExists(String uuid) {
         return roomRepository.countRoomByUUID(uuid) != 0;
     }
+
+    public boolean userIsRoomOwner(String uuid, String username) {
+        return roomRepository.countRoomByUUIDAndOwnerUsername(uuid, username) != 0;
+    }
 }

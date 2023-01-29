@@ -11,7 +11,8 @@ public interface RoomRepository extends AbstractCrudRepository<Room, Long> {
     @Query("select room.UUID from Room room where room.name=:name")
     Optional<String> findRoomUUIDByName(String name);
 
-
     long countRoomByUUID(String uuid);
+
+    long countRoomByUUIDAndOwnerUsername(String uuid, String OwnerUsername);
 
 }
