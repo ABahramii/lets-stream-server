@@ -42,11 +42,16 @@ public class ChatResource {
             if (memberDTO.isUser()) {
                 // Todo: add exception handling for userNotFound
                 User user = userService.findByUsername(memberDTO.getName());
-                roomUserService.save(new RoomUser(room, user));
+                if (roomUserService.userCanJoinToRoom(user.getUsername(), roomUUID)) {
+                    roomUserService.save(new RoomUser(room, user));
+                    simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
+                }
             } else {
-                guestService.save(new Guest(memberDTO.getName(), room));
+                if (guestService.guestCanJoinToRoom(memberDTO.getName(), roomUUID)) {
+                    guestService.save(new Guest(memberDTO.getName(), room));
+                    simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
+                }
             }
-            simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
         }
     }
 }
