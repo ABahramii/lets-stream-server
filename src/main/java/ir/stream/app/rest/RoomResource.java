@@ -2,11 +2,14 @@ package ir.stream.app.rest;
 
 import ir.stream.app.dto.ChatDTO;
 import ir.stream.app.dto.MemberDTO;
+import ir.stream.app.dto.RoomDTO;
 import ir.stream.app.entity.Room;
 import ir.stream.app.service.*;
 import ir.stream.app.utils.JwtUtils;
 import ir.stream.core.dto.HttpResponse;
+import ir.stream.core.dto.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,11 +25,26 @@ public class RoomResource {
     private final ChatService chatService;
     private final RoomUserService roomUserService;
     private final GuestService guestService;
+    private final UserService userService;
     private final JwtUtils jwtUtils;
 
     @GetMapping
     public ResponseEntity<HttpResponse<List<Room>>> findALl() {
         return ResponseEntity.ok(new HttpResponse<>(roomService.findAll()));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<HttpResponseStatus> create(@RequestBody RoomDTO roomDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        String token = authHeader.split(" ")[1];
+        String username = jwtUtils.extractUsername(token);
+
+        Room room = new Room();
+        room.setName(roomDto.getName());
+        room.setOwner(userService.findByUsername(username));
+        room.setActive(roomDto.isActive());
+        room.setPrivateRoom(roomDto.isPrivateRoom());
+        roomService.save(room);
+        return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
     }
 
     @GetMapping("/{name}")

@@ -24,6 +24,12 @@ public class Room extends AbstractBaseEntity<Long> {
     @JoinColumn(name = "OWNER")
     private User owner;
 
+    @Column(name = "ACTIVE", nullable = false)
+    private boolean active;
+
+    @Column(name = "PRIVATE", nullable = false)
+    private boolean privateRoom;
+
     @OneToMany(mappedBy = "room")
     private Set<RoomUser> users;
 
