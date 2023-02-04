@@ -27,6 +27,9 @@ public class Room extends AbstractBaseEntity<Long> {
     @Column(name = "ACTIVE", nullable = false)
     private boolean active;
 
+    @Column(name = "IMAGE"/*, nullable = false*/)
+    private byte[] image;
+
     @Column(name = "PRIVATE", nullable = false)
     private boolean privateRoom;
 

@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class RoomResource {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<HttpResponseStatus> create(@RequestBody RoomDTO roomDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+    public ResponseEntity<HttpResponseStatus> create(@ModelAttribute RoomDTO roomDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
         String token = authHeader.split(" ")[1];
         String username = jwtUtils.extractUsername(token);
 
@@ -42,6 +43,7 @@ public class RoomResource {
         room.setName(roomDto.getName());
         room.setOwner(userService.findByUsername(username));
         room.setActive(roomDto.isActive());
+        room.setImage(roomDto.getImage().getInputStream().readAllBytes());
         room.setPrivateRoom(roomDto.isPrivateRoom());
         roomService.save(room);
         return ResponseEntity.ok(new HttpResponseStatus("ok", 200));

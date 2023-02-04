@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -12,5 +13,6 @@ import lombok.Setter;
 public class RoomDTO {
     private String name;
     private boolean active;
+    private MultipartFile image;
     private boolean privateRoom;
 }
