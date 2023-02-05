@@ -18,7 +18,6 @@ public class UserRoleService extends AbstractService<UserRole, Long, UserRoleRep
         UserRole userRole = new UserRole();
         userRole.setUser(user);
         userRole.setRole(role);
-        userRole.setIsDeleted(false);
         return save(userRole);
     }
 }
