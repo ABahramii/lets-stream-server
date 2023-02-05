@@ -35,7 +35,8 @@ public class RoomResource {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<HttpResponseStatus> create(@ModelAttribute RoomDTO roomDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
+    public ResponseEntity<HttpResponseStatus> create(@ModelAttribute RoomDTO roomDto,
+                                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
         String token = authHeader.split(" ")[1];
         String username = jwtUtils.extractUsername(token);
 
@@ -43,8 +44,9 @@ public class RoomResource {
         room.setName(roomDto.getName());
         room.setOwner(userService.findByUsername(username));
         room.setActive(roomDto.isActive());
-        room.setImage(roomDto.getImage().getInputStream().readAllBytes());
+        room.setImage(roomDto.getImage().getBytes());
         room.setPrivateRoom(roomDto.isPrivateRoom());
+        room.setPrivateCode(roomDto.getPrivateCode());
         roomService.save(room);
         return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
     }
@@ -70,7 +72,8 @@ public class RoomResource {
     }
 
     @PostMapping("/{uuid}/checkJoin")
-    public ResponseEntity<HttpResponse<Map<String, Boolean>>> checkJoin(@PathVariable String uuid, @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> checkJoin(@PathVariable String uuid,
+                                                                        @RequestBody MemberDTO memberDTO) {
         boolean canJoin;
         if (memberDTO.isUser()) {
             canJoin = roomUserService.userCanJoinToRoom(memberDTO.getName(), uuid);
@@ -82,7 +85,8 @@ public class RoomResource {
 
     // Todo: must be refactor
     @GetMapping("{uuid}/userIsRoomOwner/{token}")
-    public ResponseEntity<HttpResponse<Map<String, Boolean>>> userIsRoomOwner(@PathVariable String uuid, @PathVariable String token) {
+    public ResponseEntity<HttpResponse<Map<String, Boolean>>> userIsRoomOwner(@PathVariable String uuid,
+                                                                              @PathVariable String token) {
         try {
             if (!jwtUtils.isTokenExpired(token)) {
                 String username = jwtUtils.extractUsername(token);

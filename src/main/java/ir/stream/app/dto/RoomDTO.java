@@ -15,4 +15,5 @@ public class RoomDTO {
     private boolean active;
     private MultipartFile image;
     private boolean privateRoom;
+    private String privateCode;
 }

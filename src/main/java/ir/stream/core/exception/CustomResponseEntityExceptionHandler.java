@@ -58,6 +58,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         );
     }
 
+    // Todo: change exception message
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<HttpResponse<?>> handleAllExceptions(Exception ex) {
         ex.printStackTrace();
