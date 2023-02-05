@@ -19,6 +19,8 @@ import javax.naming.AuthenticationException;
 @ControllerAdvice
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
+    // Todo: remove printStackTraces
+
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<HttpResponse<?>> handleNotFoundException(NotFoundException ex) {
         ex.printStackTrace();
@@ -58,12 +60,23 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         );
     }
 
-    // Todo: change exception message
+    @ExceptionHandler(DuplicateException.class)
+    public final ResponseEntity<HttpResponse<?>> handleDuplicateException(NotFoundException ex) {
+        HttpResponseStatus status = new HttpResponseStatus(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(
+                new HttpResponse<>(status),
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<HttpResponse<?>> handleAllExceptions(Exception ex) {
         ex.printStackTrace();
         HttpResponseStatus status = new HttpResponseStatus(
-                ".خطا در پزدازش اطلاعات!\nلطفابا پشتیبانی تماس بگیرید",
+                "error in data processing.",
                 HttpStatus.INTERNAL_SERVER_ERROR.value()
         );
         return new ResponseEntity<>(
