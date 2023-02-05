@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface UserRepository extends AbstractCrudRepository<User, Long> {
 
     Optional<User> findByUsernameIgnoreCase(String username);
+
+    long countByUsername(String username);
 }

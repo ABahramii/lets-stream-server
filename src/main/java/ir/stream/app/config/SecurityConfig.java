@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/room/create").authenticated()
                 .antMatchers("/room/**").permitAll()
+                .antMatchers("/users/create").permitAll()
                 .antMatchers("/ws").permitAll()
                 .anyRequest()
                 .authenticated()
