@@ -36,13 +36,13 @@ public class AuthenticationResource {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/token/refresh/{uuid}")
+    /*@GetMapping("/token/refresh/{uuid}")
     public ResponseEntity<HttpResponse<AuthenticationTokenDTO>> getAccessTokenByRefreshToken(
             @PathVariable String uuid
     ) {
         AuthenticationTokenDTO authenticationTokenDTO = userService.refreshTokens(uuid);
         return ResponseEntity.ok(new HttpResponse<>(authenticationTokenDTO));
-    }
+    }*/
 
     /*@GetMapping("/token/isValid/{token}")
     public ResponseEntity<HttpResponse<Map<String, Boolean>>> isTokenValid(@PathVariable String token) {

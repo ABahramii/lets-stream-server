@@ -1,7 +1,6 @@
 package ir.stream.app.service;
 
 
-import ir.stream.app.dto.AuthenticationTokenDTO;
 import ir.stream.app.entity.User;
 import ir.stream.app.repository.UserRepository;
 import ir.stream.app.utils.JwtUtils;
@@ -34,10 +33,10 @@ public class UserService extends AbstractService<User, Long, UserRepository> imp
         return save(user);
     }
 
-    public AuthenticationTokenDTO refreshTokens(String refreshToken) {
+    /*public AuthenticationTokenDTO refreshTokens(String refreshToken) {
         User user = refreshTokenService.getRefreshTokenUser(refreshToken);
         return jwtUtils.generateToken(user);
-    }
+    }*/
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

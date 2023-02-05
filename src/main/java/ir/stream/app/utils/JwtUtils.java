@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import ir.stream.app.dto.AccessTokenDTO;
 import ir.stream.app.dto.AuthenticationTokenDTO;
-import ir.stream.app.entity.RefreshToken;
 import ir.stream.app.entity.User;
 import ir.stream.app.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
@@ -46,28 +45,23 @@ public class JwtUtils {
     }
 
     public AuthenticationTokenDTO generateToken(User user) {
-        RefreshToken refreshToken = refreshTokenService.generateRefreshToken(user, 1440);
         AccessTokenDTO accessTokenDTO = createToken(new HashMap<>(), user);
 
-        // Todo: remove refresh token or use it
         return new AuthenticationTokenDTO(
                 accessTokenDTO.getToken(),
-                refreshToken.getUUID(),
                 accessTokenDTO.getExpireAt().getTime(),
-                refreshToken.getExpireAt().toEpochMilli(),
                 user.getUsername()
         );
     }
 
     private AccessTokenDTO createToken(Map<String, Object> claims, User user) {
         // Todo: change expiration time
-        Date expirationDate = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15));
+        Date expirationDate = new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1));
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())
                 .claim("authorities", user.getRoles())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                // Todo
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
                 .compact();

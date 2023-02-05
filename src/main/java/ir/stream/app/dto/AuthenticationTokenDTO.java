@@ -11,8 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthenticationTokenDTO {
     private String accessToken;
-    private String refreshToken;
     private long accessTokenExpireAt;
-    private long refreshTokenExpireAt;
     private String username;
 }
