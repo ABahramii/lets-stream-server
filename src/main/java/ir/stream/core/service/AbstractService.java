@@ -4,8 +4,6 @@ package ir.stream.core.service;
 import ir.stream.core.exception.NotFoundException;
 import ir.stream.core.model.AbstractBaseEntity;
 import ir.stream.core.repository.AbstractCrudRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -32,34 +30,13 @@ public class AbstractService<ENTITY extends AbstractBaseEntity<PK>,
     }
 
     @Override
-    public Page<ENTITY> findAll(Pageable pageable) {
-        return abstractRepository.findAll(pageable);
-    }
-
-    @Override
     public List<ENTITY> findAll() {
         return abstractRepository.findAll();
     }
 
     @Override
-    public Page<ENTITY> findAllNotDeleted(Pageable pageable) {
-        return abstractRepository.findAllByIsDeleted(false, pageable);
-    }
-
-    @Override
-    public List<ENTITY> findAllNotDeleted() {
-        return abstractRepository.findAllByIsDeleted(false);
-    }
-
-    @Override
     public ENTITY save(ENTITY object) {
         return abstractRepository.save(object);
-    }
-
-
-    @Override
-    public Long countAll() {
-        return abstractRepository.count();
     }
 
     @Override
@@ -80,26 +57,8 @@ public class AbstractService<ENTITY extends AbstractBaseEntity<PK>,
         abstractRepository.delete(object);
     }
 
-    @Override
-    public void safeDelete(ENTITY object) {
-        object.setIsDeleted(true);
-        save(object);
-    }
-
     public ENTITY findByUUID(String uuid) {
         return abstractRepository.findByUUID(uuid)
                 .orElseThrow(() -> new NotFoundException("object not found!"));
-    }
-
-    public ENTITY findByUUIDNotDeleted(String uuid) {
-        return abstractRepository.findByUUIDAndIsDeletedFalse(uuid)
-                .orElseThrow(() -> new NotFoundException("object not found!"));
-    }
-
-    @Override
-    public void safeDeleteById(PK id) {
-        ENTITY object = getById(id);
-        object.setIsDeleted(true);
-        save(object);
     }
 }
