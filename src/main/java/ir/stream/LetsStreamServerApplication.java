@@ -46,10 +46,10 @@ public class LetsStreamServerApplication {
             userRoleService.create(user2, roleManager);
             userRoleService.create(user3, roleUser);
 
-            Room room0 = new Room("temp", user1, true, null, false, "",  new HashSet<>(), new HashSet<>());
-            Room room1 = new Room("temp1", user1,  true, null, false, "", new HashSet<>(), new HashSet<>());
-            Room room2 = new Room("temp2", user2,  true, null, false, "", new HashSet<>(), new HashSet<>());
-            Room room3 = new Room("temp3", user3,  true, null, false, "", new HashSet<>(), new HashSet<>());
+            Room room0 = new Room("temp", user1, true, null, false, "", 0,  new HashSet<>(), new HashSet<>());
+            Room room1 = new Room("temp1", user1,  true, null, false, "", 0, new HashSet<>(), new HashSet<>());
+            Room room2 = new Room("temp2", user2,  true, null, false, "", 0, new HashSet<>(), new HashSet<>());
+            Room room3 = new Room("temp3", user3,  true, null, false, "", 0, new HashSet<>(), new HashSet<>());
 
             roomService.save(room0);
             roomService.save(room1);

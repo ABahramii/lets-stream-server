@@ -36,6 +36,9 @@ public class Room extends AbstractBaseEntity<Long> {
     @Column(name = "PRIVATE_CODE")
     private String privateCode;
 
+    @Column(name = "MEMBER_COUNT")
+    private long memberCount;
+
     @OneToMany(mappedBy = "room")
     private Set<RoomUser> users;
 
