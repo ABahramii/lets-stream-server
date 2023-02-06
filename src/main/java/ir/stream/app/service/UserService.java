@@ -44,7 +44,7 @@ public class UserService extends AbstractService<User, Long, UserRepository> imp
         return save(user);
     }
 
-    public boolean canCreate(String username) {
+    private boolean canCreate(String username) {
         return userRepository.countByUsername(username) == 0;
     }
 
