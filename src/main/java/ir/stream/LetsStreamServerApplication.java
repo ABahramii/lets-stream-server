@@ -46,7 +46,7 @@ public class LetsStreamServerApplication {
             userRoleService.create(user2, roleManager);
             userRoleService.create(user3, roleUser);
 
-            Room room0 = new Room("temp", user1, true, null, "", false, "", 0,  new HashSet<>(), new HashSet<>());
+            /*Room room0 = new Room("temp", user1, true, null, "", false, "", 0,  new HashSet<>(), new HashSet<>());
             Room room1 = new Room("temp1", user1,  true, null, "", false, "", 0, new HashSet<>(), new HashSet<>());
             Room room2 = new Room("temp2", user2,  true, null, "", false, "", 0, new HashSet<>(), new HashSet<>());
             Room room3 = new Room("temp3", user3,  true, null, "", false, "", 0, new HashSet<>(), new HashSet<>());
@@ -63,7 +63,7 @@ public class LetsStreamServerApplication {
             roomUserService.save(roomUser2);
 
             Chat chat1 = new Chat("This is chatroom", "12 AM", user2.getUsername(), true, room0);
-            chatService.save(chat1);
+            chatService.save(chat1);*/
         };
     }
 
