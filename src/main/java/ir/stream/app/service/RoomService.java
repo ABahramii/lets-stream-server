@@ -39,13 +39,16 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
         if (userIsRoomOwner(uuid, username)) {
             Room room = findByUUID(uuid);
             room.setName(roomDto.getName());
-            room.setImage(roomDto.getImage().getBytes());
-            room.setImageName(roomDto.getImageName());
+            if (roomDto.getImage() != null) {
+                room.setImage(roomDto.getImage().getBytes());
+                room.setImageName(roomDto.getImageName());
+            }
             room.setPrivateRoom(roomDto.isPrivateRoom());
-            room.setPrivateCode(roomDto.isPrivateRoom() ? room.getPrivateCode() : "");
+            room.setPrivateCode(roomDto.isPrivateRoom() ? roomDto.getPrivateCode() : null);
             save(room);
+        } else {
+            throw new NotFoundException("You are not owner of this room.");
         }
-        throw new NotFoundException("You are not owner of this room.");
     }
 
     public List<MemberDTO> findRoomMembers(String uuid) {
