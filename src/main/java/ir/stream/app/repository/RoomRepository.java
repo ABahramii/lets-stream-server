@@ -23,9 +23,19 @@ public interface RoomRepository extends AbstractCrudRepository<Room, Long> {
             "from Room room " +
             "inner join room.owner user " +
             "where room.active=true " +
-            "and room.privateRoom=false"
+            "and room.privateRoom=false " +
+            "order by room.createdAt desc"
     )
     List<RoomFetchDTO> findPublicRooms();
+
+    @Query(
+            "select new ir.stream.app.dto.RoomFetchDTO(room.UUID, room.active, room.name, user.username, room.memberCount) " +
+            "from Room room " +
+            "inner join room.owner user " +
+            "where user.username=:username " +
+            "order by room.createdAt desc"
+    )
+    List<RoomFetchDTO> findUserRooms(String username);
 
     @Query(
             "select new ir.stream.app.dto.RoomDTO(room.name, room.active, room.imageName, room.privateRoom, room.privateCode) " +

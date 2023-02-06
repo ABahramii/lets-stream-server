@@ -30,7 +30,11 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
     public List<RoomFetchDTO> findPublicRooms() {
         return roomRepository.findPublicRooms();
     }
-    
+
+    public List<RoomFetchDTO> findUserRooms(String username) {
+        return roomRepository.findUserRooms(username);
+    }
+
     public RoomDTO findRoomByUUIDAOwnerUsername(String uuid, String username) {
         return roomRepository.findRoomByUUIDAOwnerUsername(uuid, username);
     }

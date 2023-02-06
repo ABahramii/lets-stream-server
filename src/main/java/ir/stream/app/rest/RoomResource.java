@@ -38,18 +38,22 @@ public class RoomResource {
         return ResponseEntity.ok(new HttpResponse<>(roomService.findPublicRooms()));
     }
 
+    @GetMapping("/user/rooms")
+    public ResponseEntity<HttpResponse<List<RoomFetchDTO>>> findUserRooms(@RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
+        String username = jwtUtils.extractUsernameFromAuthHeader(authHeader);
+        return ResponseEntity.ok(new HttpResponse<>(roomService.findUserRooms(username)));
+    }
+
     @GetMapping("/fetch/{uuid}")
     public ResponseEntity<HttpResponse<RoomDTO>> findRoomByUUID(@PathVariable String uuid, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        String token = authHeader.split(" ")[1];
-        String username = jwtUtils.extractUsername(token);
+        String username = jwtUtils.extractUsernameFromAuthHeader(authHeader);
         return ResponseEntity.ok(new HttpResponse<>(roomService.findRoomByUUIDAOwnerUsername(uuid, username)));
     }
     
     @PostMapping("/create")
     public ResponseEntity<HttpResponseStatus> create(@ModelAttribute RoomDTO roomDto,
                                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
-        String token = authHeader.split(" ")[1];
-        String username = jwtUtils.extractUsername(token);
+        String username = jwtUtils.extractUsernameFromAuthHeader(authHeader);
 
         Room room = new Room();
         room.setName(roomDto.getName());
@@ -66,8 +70,7 @@ public class RoomResource {
     @PutMapping("/edit/{uuid}")
     public ResponseEntity<HttpResponseStatus> edit(@ModelAttribute RoomDTO roomDto, @PathVariable String uuid,
                                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
-        String token = authHeader.split(" ")[1];
-        String username = jwtUtils.extractUsername(token);
+        String username = jwtUtils.extractUsernameFromAuthHeader(authHeader);
         roomService.edit(roomDto, uuid, username);
         return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
     }

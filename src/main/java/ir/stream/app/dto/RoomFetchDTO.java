@@ -11,7 +11,15 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoomFetchDTO {
     private String uuid;
+    private boolean active;
     private String name;
     private String owner;
     private long memberCount;
+
+    public RoomFetchDTO(String uuid, String name, String owner, long memberCount) {
+        this.uuid = uuid;
+        this.name = name;
+        this.owner = owner;
+        this.memberCount = memberCount;
+    }
 }
