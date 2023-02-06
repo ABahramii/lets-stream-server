@@ -6,7 +6,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import ir.stream.app.dto.AccessTokenDTO;
 import ir.stream.app.dto.AuthenticationTokenDTO;
 import ir.stream.app.entity.User;
-import ir.stream.app.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,8 +19,7 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-    private final String jwtSigningKey = "secret";
-    private final RefreshTokenService refreshTokenService;
+    private final String jwtSigningKey = "secre99T";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
