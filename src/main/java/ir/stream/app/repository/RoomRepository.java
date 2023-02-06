@@ -35,4 +35,9 @@ public interface RoomRepository extends AbstractCrudRepository<Room, Long> {
                     "and user.username=:username"
     )
     RoomDTO findRoomByUUIDAOwnerUsername(String uuid, String username);
+
+    @Query(
+            "select room.image from Room room where room.UUID=:UUID"
+    )
+    byte[] findRoomImageByUUID(String UUID);
 }

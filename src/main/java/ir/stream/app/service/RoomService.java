@@ -51,6 +51,10 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
         }
     }
 
+    public byte[] findRoomImageByUUID(String uuid) {
+        return roomRepository.findRoomImageByUUID(uuid);
+    }
+
     public List<MemberDTO> findRoomMembers(String uuid) {
         List<MemberDTO> memberDtoList = new ArrayList<>();
         memberDtoList.addAll(roomUserService.findUserMemberDtoListByRoomUUID(uuid));

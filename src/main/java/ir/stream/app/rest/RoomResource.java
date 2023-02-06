@@ -10,6 +10,8 @@ import ir.stream.app.utils.JwtUtils;
 import ir.stream.core.dto.HttpResponse;
 import ir.stream.core.dto.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +70,14 @@ public class RoomResource {
         String username = jwtUtils.extractUsername(token);
         roomService.edit(roomDto, uuid, username);
         return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
+    }
+
+    @GetMapping("/image/{uuid}")
+    public ResponseEntity<?> findRoomImage(@PathVariable String uuid) {
+        Resource resource = new ByteArrayResource(roomService.findRoomImageByUUID(uuid));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
     @GetMapping("/{name}")
