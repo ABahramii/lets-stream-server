@@ -3,6 +3,7 @@ package ir.stream.app.rest;
 import ir.stream.app.dto.ChatDTO;
 import ir.stream.app.dto.MemberDTO;
 import ir.stream.app.dto.RoomDTO;
+import ir.stream.app.dto.RoomFetchDTO;
 import ir.stream.app.entity.Room;
 import ir.stream.app.service.*;
 import ir.stream.app.utils.JwtUtils;
@@ -29,9 +30,10 @@ public class RoomResource {
     private final UserService userService;
     private final JwtUtils jwtUtils;
 
+    // Todo: find top 10 rooms
     @GetMapping
-    public ResponseEntity<HttpResponse<List<Room>>> findALl() {
-        return ResponseEntity.ok(new HttpResponse<>(roomService.findAll()));
+    public ResponseEntity<HttpResponse<List<RoomFetchDTO>>> findPublicRooms() {
+        return ResponseEntity.ok(new HttpResponse<>(roomService.findPublicRooms()));
     }
 
     @PostMapping("/create")

@@ -1,6 +1,7 @@
 package ir.stream.app.service;
 
 import ir.stream.app.dto.MemberDTO;
+import ir.stream.app.dto.RoomFetchDTO;
 import ir.stream.app.entity.Room;
 import ir.stream.app.repository.RoomRepository;
 import ir.stream.core.exception.NotFoundException;
@@ -24,6 +25,10 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
         this.guestService = guestService;
     }
 
+    public List<RoomFetchDTO> findPublicRooms() {
+        return roomRepository.findPublicRooms();
+    }
+
     public List<MemberDTO> findRoomMembers(String uuid) {
         List<MemberDTO> memberDtoList = new ArrayList<>();
         memberDtoList.addAll(roomUserService.findUserMemberDtoListByRoomUUID(uuid));
@@ -42,5 +47,10 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
 
     public boolean userIsRoomOwner(String uuid, String username) {
         return roomRepository.countRoomByUUIDAndOwnerUsername(uuid, username) != 0;
+    }
+
+    public void updateMemberCount(Room room) {
+        room.setMemberCount(room.getMemberCount() + 1);
+        roomRepository.save(room);
     }
 }
