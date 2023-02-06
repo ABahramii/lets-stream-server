@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/room/create").authenticated()
+                .antMatchers("/room/edit/*").authenticated()
                 .antMatchers("/room/**").permitAll()
                 .antMatchers("/users/create").permitAll()
                 .antMatchers("/ws").permitAll()

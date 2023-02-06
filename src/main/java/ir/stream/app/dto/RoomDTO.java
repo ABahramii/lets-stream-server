@@ -14,6 +14,15 @@ public class RoomDTO {
     private String name;
     private boolean active;
     private MultipartFile image;
+    private String imageName;
     private boolean privateRoom;
     private String privateCode;
+
+    public RoomDTO(String name, boolean active, String imageName, boolean privateRoom, String privateCode) {
+        this.name = name;
+        this.active = active;
+        this.imageName = imageName;
+        this.privateRoom = privateRoom;
+        this.privateCode = privateCode;
+    }
 }

@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomFetchDTO {
+    private String uuid;
     private String name;
     private String owner;
     private long memberCount;

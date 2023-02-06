@@ -1,6 +1,7 @@
 package ir.stream.app.service;
 
 import ir.stream.app.dto.MemberDTO;
+import ir.stream.app.dto.RoomDTO;
 import ir.stream.app.dto.RoomFetchDTO;
 import ir.stream.app.entity.Room;
 import ir.stream.app.repository.RoomRepository;
@@ -8,6 +9,7 @@ import ir.stream.core.exception.NotFoundException;
 import ir.stream.core.service.AbstractService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,23 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
 
     public List<RoomFetchDTO> findPublicRooms() {
         return roomRepository.findPublicRooms();
+    }
+    
+    public RoomDTO findRoomByUUIDAOwnerUsername(String uuid, String username) {
+        return roomRepository.findRoomByUUIDAOwnerUsername(uuid, username);
+    }
+
+    public void edit(RoomDTO roomDto, String uuid, String username) throws IOException {
+        if (userIsRoomOwner(uuid, username)) {
+            Room room = findByUUID(uuid);
+            room.setName(roomDto.getName());
+            room.setImage(roomDto.getImage().getBytes());
+            room.setImageName(roomDto.getImageName());
+            room.setPrivateRoom(roomDto.isPrivateRoom());
+            room.setPrivateCode(roomDto.isPrivateRoom() ? room.getPrivateCode() : "");
+            save(room);
+        }
+        throw new NotFoundException("You are not owner of this room.");
     }
 
     public List<MemberDTO> findRoomMembers(String uuid) {
