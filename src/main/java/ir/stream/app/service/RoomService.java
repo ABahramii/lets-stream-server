@@ -60,6 +60,15 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
         return roomRepository.findRoomImageByUUID(uuid);
     }
 
+    public void delete(String uuid, String username) {
+        if (userIsRoomOwner(uuid, username)) {
+            Room room = findByUUID(uuid);
+            delete(room);
+        } else {
+            throw new NotFoundException("You are not owner of this room.");
+        }
+    }
+
     public List<MemberDTO> findRoomMembers(String uuid) {
         List<MemberDTO> memberDtoList = new ArrayList<>();
         memberDtoList.addAll(roomUserService.findUserMemberDtoListByRoomUUID(uuid));

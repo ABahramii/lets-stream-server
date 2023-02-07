@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .antMatchers("/room//user/rooms").authenticated()
                 .antMatchers("/room/create").authenticated()
                 .antMatchers("/room/edit/*").authenticated()
+                .antMatchers("/delete/*").authenticated()
                 .antMatchers("/room/**").permitAll()
                 .antMatchers("/users/create").permitAll()
                 .antMatchers("/ws").permitAll()

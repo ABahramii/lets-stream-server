@@ -83,6 +83,14 @@ public class RoomResource {
                 .body(resource);
     }
 
+    @DeleteMapping("/delete/{uuid}")
+    public ResponseEntity<HttpResponseStatus> delete(@PathVariable String uuid,
+                                                     @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
+        String username = jwtUtils.extractUsernameFromAuthHeader(authHeader);
+        roomService.delete(uuid, username);
+        return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
+    }
+
     @GetMapping("/{name}")
     public ResponseEntity<HttpResponse<String>> findRoomUuidByName(@PathVariable String name) {
         return ResponseEntity.ok(new HttpResponse<>(roomService.findRoomUUIDByName(name)));
