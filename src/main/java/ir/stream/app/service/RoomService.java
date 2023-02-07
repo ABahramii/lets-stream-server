@@ -47,6 +47,7 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
                 room.setImage(roomDto.getImage().getBytes());
                 room.setImageName(roomDto.getImageName());
             }
+            room.setActive(roomDto.isActive());
             room.setPrivateRoom(roomDto.isPrivateRoom());
             room.setPrivateCode(roomDto.isPrivateRoom() ? roomDto.getPrivateCode() : null);
             save(room);
