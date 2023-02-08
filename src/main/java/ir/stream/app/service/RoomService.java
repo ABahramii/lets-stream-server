@@ -94,8 +94,16 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
         return roomRepository.countRoomByUUIDAndOwnerUsername(uuid, username) != 0;
     }
 
-    public void updateMemberCount(Room room) {
+    public void increaseMemberCount(Room room) {
         room.setMemberCount(room.getMemberCount() + 1);
         roomRepository.save(room);
+    }
+
+    public void decreaseMemberCount(Room room) {
+        long memberCount = room.getMemberCount();
+        if (memberCount > 0) {
+            room.setMemberCount(memberCount - 1);
+            roomRepository.save(room);
+        }
     }
 }

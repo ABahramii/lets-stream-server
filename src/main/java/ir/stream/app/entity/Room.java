@@ -43,9 +43,9 @@ public class Room extends AbstractBaseEntity<Long> {
     @Column(name = "MEMBER_COUNT")
     private long memberCount;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", orphanRemoval = true)
     private Set<RoomUser> users;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", orphanRemoval = true)
     private Set<Guest> guests;
 }

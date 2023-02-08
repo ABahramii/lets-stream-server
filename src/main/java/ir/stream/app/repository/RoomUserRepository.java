@@ -25,4 +25,11 @@ public interface RoomUserRepository extends AbstractCrudRepository<RoomUser, Lon
     )
     long countByUsernameAndRoomUUID(String username, String roomUUID);
 
+    @Query(
+            "select roomUser from RoomUser roomUser " +
+            "inner join roomUser.room room " +
+            "inner join roomUser.user user " +
+            "where room.UUID=:roomUUID and user.username=:username"
+    )
+    RoomUser findByUsernameAndRoomUUID(String username, String roomUUID);
 }

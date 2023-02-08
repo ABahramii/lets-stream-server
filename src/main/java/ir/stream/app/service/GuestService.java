@@ -24,4 +24,8 @@ public class GuestService extends AbstractService<Guest, Long, GuestRepository> 
     public boolean guestCanJoinToRoom(String guestName, String roomUUID) {
         return guestRepository.countGuestByNameAndRoomUUID(guestName, roomUUID) == 0;
     }
+
+    public Guest findByNameAndRoomUUID(String name, String roomUUID) {
+        return guestRepository.findByNameAndRoomUUID(name, roomUUID);
+    }
 }

@@ -19,4 +19,6 @@ public interface GuestRepository extends AbstractCrudRepository<Guest, Long> {
 
     long countGuestByNameAndRoomUUID(String name, String roomUUID);
 
+    Guest findByNameAndRoomUUID(String name, String roomUUID);
+
 }

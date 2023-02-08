@@ -40,18 +40,42 @@ public class ChatResource {
             Room room = roomService.findByUUID(roomUUID);
 
             if (memberDTO.isUser()) {
-                // Todo: add exception handling for userNotFound
                 User user = userService.findByUsername(memberDTO.getName());
                 if (roomUserService.userCanJoinToRoom(user.getUsername(), roomUUID)) {
                     roomUserService.save(new RoomUser(room, user));
+                    roomService.increaseMemberCount(room);
                     simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
                 }
             } else {
                 if (guestService.guestCanJoinToRoom(memberDTO.getName(), roomUUID)) {
                     guestService.save(new Guest(memberDTO.getName(), room));
+                    roomService.increaseMemberCount(room);
                     simpMessagingTemplate.convertAndSend("/room/members/" + roomUUID, memberDTO);
                 }
             }
         }
     }
+
+
+    @MessageMapping("/member/leave/{roomUUID}")
+    public void leaveMember(@Payload MemberDTO memberDTO, @DestinationVariable String roomUUID) {
+        if (memberDTO.getName() != null && !memberDTO.getName().isEmpty()) {
+
+            if (memberDTO.isUser()) {
+                RoomUser roomUser = roomUserService.findByUsernameAndRoomUUID(memberDTO.getName(), roomUUID);
+                if (roomUser != null) {
+                    roomUserService.delete(roomUser);
+                }
+            } else {
+                Guest guest = guestService.findByNameAndRoomUUID(memberDTO.getName(), roomUUID);
+                if (guest != null) {
+                    guestService.delete(guest);
+                }
+            }
+            Room room = roomService.findByUUID(roomUUID);
+            roomService.decreaseMemberCount(room);
+            simpMessagingTemplate.convertAndSend("/room/members/leave/" + roomUUID, memberDTO);
+        }
+    }
+
 }
