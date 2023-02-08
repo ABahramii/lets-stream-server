@@ -11,8 +11,11 @@ import java.util.Optional;
 
 public interface RoomRepository extends AbstractCrudRepository<Room, Long> {
 
-    @Query("select room.UUID from Room room where room.name=:name and room.active=true and room.privateRoom=false")
+    @Query("select room.UUID from Room room where room.active=true and room.privateRoom=false and room.name=:name")
     Optional<String> findRoomUUIDByName(String name);
+
+    @Query("select room.UUID from Room room where room.active=true and room.privateRoom=true and room.privateCode=:privateCode")
+    Optional<String> findRoomUUIDByPrivateCode(String privateCode);
 
     long countRoomByUUID(String uuid);
 

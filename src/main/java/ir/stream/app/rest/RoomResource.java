@@ -96,6 +96,11 @@ public class RoomResource {
         return ResponseEntity.ok(new HttpResponse<>(roomService.findRoomUUIDByName(name)));
     }
 
+    @GetMapping("/private/{privateCode}")
+    public ResponseEntity<HttpResponse<String>> findRoomUuidByPrivateCode(@PathVariable String privateCode) {
+        return ResponseEntity.ok(new HttpResponse<>(roomService.findRoomUUIDByPrivateCode(privateCode)));
+    }
+
     @GetMapping("/exists/{uuid}")
     public ResponseEntity<HttpResponse<Map<String, Boolean>>> roomExists(@PathVariable String uuid) {
         return ResponseEntity.ok(new HttpResponse<>(Map.of("exists", roomService.roomExists(uuid))));
