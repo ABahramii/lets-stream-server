@@ -40,6 +40,17 @@ public class UserService extends AbstractService<User, Long, UserRepository> imp
         throw new DuplicateException("username already taken.");
     }
 
+    public void edit(UserDTO userDTO) {
+        User user = findByUsername(userDTO.getUsername());
+        if (user.getPassword().equals(passwordEncoder.encode(userDTO.getPreviousPass()))) {
+            user.setName(userDTO.getName());
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            save(user);
+        } else {
+            throw new NotFoundException("previous pass is incorrect");
+        }
+    }
+
     public User create(User user) {
         return save(user);
     }
@@ -52,6 +63,16 @@ public class UserService extends AbstractService<User, Long, UserRepository> imp
         User user = refreshTokenService.getRefreshTokenUser(refreshToken);
         return jwtUtils.generateToken(user);
     }*/
+
+    public String findUUIDByUsername(String username) {
+        return userRepository.findUUIDByUsername(username)
+                .orElseThrow(() -> new NotFoundException(String.format("User by username %s not found !", username)));
+    }
+
+    public UserDTO findUserDtoByUUID(String uuid) {
+        return userRepository.findUserDtoByUUID(uuid)
+                .orElseThrow(() -> new NotFoundException("User not found !"));
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
