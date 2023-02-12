@@ -25,6 +25,7 @@ public class Chat extends AbstractBaseEntity<Long> {
     @Column(name = "SENDER_NAME")
     private String senderName;
 
+    // Todo: remove this column
     @Column(name = "SENDER_IS_USER")
     private boolean senderIsUser;
 
