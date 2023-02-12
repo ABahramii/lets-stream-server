@@ -81,6 +81,10 @@ public class RoomService extends AbstractService<Room, Long, RoomRepository> {
                 .orElseThrow(() -> new NotFoundException(String.format("Room with name %s not found !", name)));
     }
 
+    public boolean canSave(String name) {
+        return roomRepository.countRoomByName(name) == 0;
+    }
+
     public String findRoomUUIDByPrivateCode(String privateCode) {
         return roomRepository.findRoomUUIDByPrivateCode(privateCode)
                 .orElseThrow(() -> new NotFoundException(String.format("Room with private code %s not found !", privateCode)));

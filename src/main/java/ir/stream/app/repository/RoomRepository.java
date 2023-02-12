@@ -53,4 +53,6 @@ public interface RoomRepository extends AbstractCrudRepository<Room, Long> {
             "select room.image from Room room where room.UUID=:UUID"
     )
     byte[] findRoomImageByUUID(String UUID);
+
+    long countRoomByName(String name);
 }

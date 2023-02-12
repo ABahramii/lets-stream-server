@@ -55,16 +55,19 @@ public class RoomResource {
                                                      @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) throws IOException {
         String username = jwtUtils.extractUsernameFromAuthHeader(authHeader);
 
-        Room room = new Room();
-        room.setName(roomDto.getName());
-        room.setOwner(userService.findByUsername(username));
-        room.setActive(roomDto.isActive());
-        room.setImage(roomDto.getImage().getBytes());
-        room.setImageName(roomDto.getImageName());
-        room.setPrivateRoom(roomDto.isPrivateRoom());
-        room.setPrivateCode(roomDto.getPrivateCode());
-        roomService.save(room);
-        return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
+        if (roomService.canSave(roomDto.getName())) {
+            Room room = new Room();
+            room.setName(roomDto.getName());
+            room.setOwner(userService.findByUsername(username));
+            room.setActive(roomDto.isActive());
+            room.setImage(roomDto.getImage().getBytes());
+            room.setImageName(roomDto.getImageName());
+            room.setPrivateRoom(roomDto.isPrivateRoom());
+            room.setPrivateCode(roomDto.getPrivateCode());
+            roomService.save(room);
+            return ResponseEntity.ok(new HttpResponseStatus("ok", 200));
+        }
+        return ResponseEntity.ok(new HttpResponseStatus("Room with this name, already exists", 500));
     }
 
     @PutMapping("/edit/{uuid}")
